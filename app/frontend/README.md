@@ -7,10 +7,10 @@ app/frontend/
 ├── entrypoints/
 │   ├── application.js      Turbo + Stimulus. Loaded on every page.
 │   ├── application.css     Tailwind.
-│   └── dashboard.jsx       One entrypoint per React page-app.
-├── controllers/            Stimulus controllers (small islands).
+│   └── dashboard.tsx       One entrypoint per React page-app.
+├── controllers/            Stimulus controllers (small islands). Plain JS.
 └── apps/
-    └── dashboard/          React page-app source.
+    └── dashboard/          React page-app source. TypeScript.
 ```
 
 ## Tier 1 — Stimulus controllers
@@ -26,11 +26,17 @@ Each app gets its own Vite entrypoint so React ships only on pages that use it.
 
 ```erb
 <% content_for :react_app do %>
-  <%= vite_javascript_tag "dashboard.jsx" %>
+  <%= vite_javascript_tag "dashboard.tsx" %>
 <% end %>
 
 <div id="dashboard-app" data-props="<%= @props.to_json %>"></div>
 ```
+
+Props are declared in the app's `types.ts` — that type is the contract with the
+Rails controller. Note that `JSON.parse(...) as Props` at the mount point is an
+assertion, not a check: if the server renames a key, TypeScript stays happy and
+React gets `undefined`. Add runtime validation there once an app has a real API
+boundary.
 
 Using `content_for :react_app` also emits `<meta name="turbo-visit-control"
 content="reload">`, which is what keeps the two tiers from colliding.

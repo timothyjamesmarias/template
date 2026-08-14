@@ -1,5 +1,7 @@
 class DashboardController < ApplicationController
+  before_action :authenticate_user!
+
   def show
-    @props = { accountName: "Acme Inc", initialStep: 0 }
+    @props = { accountName: current_user.email, initialStep: 0 }
   end
 end

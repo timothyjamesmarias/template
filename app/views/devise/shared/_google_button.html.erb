@@ -1,0 +1,8 @@
+<% if User.omniauth_providers.include?(:google_oauth2) && Devise.omniauth_configs.key?(:google_oauth2) %>
+  <div class="mt-6 border-t border-slate-200 pt-6">
+    <%= button_to "Continue with Google",
+          omniauth_authorize_path(:user, :google_oauth2),
+          data: { testid: "google-sign-in" },
+          class: "w-full rounded border border-slate-300 px-3 py-2 text-sm text-slate-700" %>
+  </div>
+<% end %>

@@ -10,19 +10,23 @@ class IslandsTest < ApplicationSystemTestCase
   end
 
   test "react page-app owns its subtree and holds client state" do
+    sign_in_as email: "ada@example.com"
+
     visit dashboard_path
-    assert_selector "[data-testid='dashboard']", text: "Acme Inc"
+    assert_selector "[data-testid='dashboard']", text: "ada@example.com"
 
-    fill_in_react "name-input", with: "Ada"
+    fill_in_react "name-input", with: "Ada Lovelace"
     find("[data-testid='next']").click
-    fill_in_react "email-input", with: "ada@example.com"
+    fill_in_react "email-input", with: "contact@example.org"
     find("[data-testid='next']").click
 
-    assert_selector "[data-testid='review-name']", text: "Ada"
-    assert_selector "[data-testid='review-email']", text: "ada@example.com"
+    assert_selector "[data-testid='review-name']", text: "Ada Lovelace"
+    assert_selector "[data-testid='review-email']", text: "contact@example.org"
   end
 
   test "react pages opt out of turbo drive" do
+    sign_in_as
+
     visit dashboard_path
     assert_selector "meta[name='turbo-visit-control'][content='reload']", visible: false
   end

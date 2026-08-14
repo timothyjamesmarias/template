@@ -12,6 +12,11 @@ gem "puma", ">= 5.0"
 gem "vite_rails"
 # Turbo Drive/Frames/Streams for server-rendered pages [https://turbo.hotwired.dev]
 gem "turbo-rails"
+
+# Authentication [https://github.com/heartcombo/devise]
+gem "devise"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
