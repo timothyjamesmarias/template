@@ -1,0 +1,13 @@
+<% content_for :react_app do %>
+  <%= vite_javascript_tag "dashboard.jsx" %>
+<% end %>
+
+<div class="w-full">
+  <p class="mb-4">
+    <%= link_to "← Back to home", root_path, class: "text-indigo-600 underline" %>
+  </p>
+
+  <%# Everything inside this node is owned by React. Stimulus controllers must
+      not reach into it, and Turbo Streams must not target it. %>
+  <div id="dashboard-app" data-props="<%= @props.to_json %>"></div>
+</div>

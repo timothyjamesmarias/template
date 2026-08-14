@@ -18,9 +18,17 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <%# React page-apps opt out of Turbo Drive: Drive caches a snapshot of the
+        rendered DOM, which would restore stale React output on back-navigation
+        while React remounts with fresh state. %>
+    <% if content_for?(:react_app) %>
+      <meta name="turbo-visit-control" content="reload">
+    <% end %>
+
     <%= vite_client_tag %>
     <%= vite_stylesheet_tag "application" %>
     <%= vite_javascript_tag "application" %>
+    <%= yield :react_app %>
   </head>
 
   <body>

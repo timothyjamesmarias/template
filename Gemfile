@@ -10,6 +10,8 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 # Bundle JavaScript and CSS with Vite [https://vite-ruby.netlify.app]
 gem "vite_rails"
+# Turbo Drive/Frames/Streams for server-rendered pages [https://turbo.hotwired.dev]
+gem "turbo-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
