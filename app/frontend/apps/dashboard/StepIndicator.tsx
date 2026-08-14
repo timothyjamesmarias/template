@@ -1,4 +1,9 @@
-export default function StepIndicator({ steps, current }) {
+type StepIndicatorProps = {
+  steps: string[]
+  current: number
+}
+
+export default function StepIndicator({ steps, current }: StepIndicatorProps) {
   return (
     <ol className="mt-4 flex gap-2 text-sm">
       {steps.map((label, index) => (

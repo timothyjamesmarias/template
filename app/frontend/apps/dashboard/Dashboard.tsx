@@ -1,13 +1,14 @@
 import { useState } from "react"
 import StepIndicator from "./StepIndicator"
+import type { DashboardProps, DraftForm } from "./types"
 
 const STEPS = [ "Account", "Details", "Review" ]
 
-export default function Dashboard({ accountName = "Example", initialStep = 0 }) {
+export default function Dashboard({ accountName, initialStep = 0 }: DashboardProps) {
   const [ step, setStep ] = useState(initialStep)
-  const [ form, setForm ] = useState({ name: "", email: "" })
+  const [ form, setForm ] = useState<DraftForm>({ name: "", email: "" })
 
-  const update = (field) => (event) =>
+  const update = (field: keyof DraftForm) => (event: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [field]: event.target.value })
 
   return (
