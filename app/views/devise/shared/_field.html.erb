@@ -1,0 +1,14 @@
+<div>
+  <%= form.label attribute, class: "block text-sm text-slate-700" %>
+
+  <% if local_assigns[:hint].present? %>
+    <span class="text-xs text-slate-500"><%= hint %></span>
+  <% end %>
+
+  <%= form.public_send(
+        local_assigns.fetch(:as, :text_field),
+        attribute,
+        class: "mt-1 w-full rounded border border-slate-300 px-3 py-2",
+        **local_assigns.fetch(:options, {})
+      ) %>
+</div>

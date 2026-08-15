@@ -17,9 +17,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     User.create!(email: email, password: password, admin: admin).confirm
 
     visit new_user_session_path
-    find("[data-testid='email']").set(email)
-    find("[data-testid='password']").set(password)
-    find("[data-testid='submit']").click
+    within "form" do
+      fill_in "Email", with: email
+      fill_in "Password", with: password
+      click_on "Sign in"
+    end
 
     assert_selector "[data-testid='current-user']", text: email
   end
