@@ -133,6 +133,22 @@ security maintainer.
 - Devise's `shared/_links` partial had its OmniAuth block removed — it calls
   `omniauth_authorize_path` for providers that may have no route.
 
+## Mail
+
+- **Postmark over SMTP in production**, configured entirely from env vars —
+  nothing lives in Rails credentials. `POSTMARK_API_TOKEN` is used for both the
+  SMTP username and password (Postmark's Server API Token works that way);
+  `POSTMARK_SMTP_USER`/`_PASSWORD` override it if you issue a stream-scoped
+  token instead.
+- **Deliveries are off unless `POSTMARK_API_TOKEN` is set**, so a deploy without
+  mail configured still boots and signs users up instead of raising.
+- **`MAILER_SENDER` must be a verified Postmark Sender Signature** or a verified
+  domain, or Postmark rejects the send.
+- **`letter_opener` in development** — mail opens in the browser rather than
+  being delivered. Test env stays `:test`.
+- Confirmation and reset links come from `default_url_options`, which reads
+  `APP_HOST` then `RENDER_EXTERNAL_HOSTNAME`.
+
 ## Infrastructure Decisions
 
 - **Solid Cache / Queue / Cable, all in the primary database.** No separate

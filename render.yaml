@@ -45,6 +45,12 @@ services:
       - key: APP_HOST
         sync: false
 
+      # Postmark Server API Token. Mail delivery stays off until this is set.
+      - key: POSTMARK_API_TOKEN
+        sync: false
+
+      # Must be a verified Sender Signature or a domain you have verified in
+      # Postmark, or sends are rejected.
       - key: MAILER_SENDER
         sync: false
 

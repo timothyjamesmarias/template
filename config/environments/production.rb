@@ -62,14 +62,21 @@ Rails.application.configure do
     protocol: "https"
   }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
-  # config.action_mailer.smtp_settings = {
-  #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
-  #   password: Rails.application.credentials.dig(:smtp, :password),
-  #   address: "smtp.example.com",
-  #   port: 587,
-  #   authentication: :plain
-  # }
+  # Postmark over SMTP. Both credentials are the same Server API Token unless
+  # you issue a stream-scoped SMTP token, in which case they differ.
+  # Delivery is only wired up when a token is present, so the app still boots
+  # without one — mail just goes nowhere.
+  config.action_mailer.perform_deliveries = ENV["POSTMARK_API_TOKEN"].present?
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDRESS", "smtp.postmarkapp.com"),
+    port: ENV.fetch("SMTP_PORT", 587).to_i,
+    user_name: ENV["POSTMARK_SMTP_USER"].presence || ENV["POSTMARK_API_TOKEN"],
+    password: ENV["POSTMARK_SMTP_PASSWORD"].presence || ENV["POSTMARK_API_TOKEN"],
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
