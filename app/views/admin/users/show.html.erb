@@ -1,0 +1,29 @@
+<% content_for :title, @user.email %>
+
+<p class="text-sm">
+  <%= link_to "← Users", admin_users_path, class: "text-indigo-600 underline" %>
+</p>
+
+<h1 data-testid="user-email" class="mt-2 text-2xl font-bold text-slate-900"><%= @user.email %></h1>
+
+<dl class="mt-6 divide-y divide-slate-100 rounded border border-slate-200 bg-white text-sm">
+  <div class="flex justify-between px-4 py-3">
+    <dt class="text-slate-600">Sign-in</dt>
+    <dd class="text-slate-900"><%= @user.provider.presence || "password" %></dd>
+  </div>
+
+  <div class="flex justify-between px-4 py-3">
+    <dt class="text-slate-600">Confirmed</dt>
+    <dd class="text-slate-900"><%= @user.confirmed_at&.to_fs(:short) || "no" %></dd>
+  </div>
+
+  <div class="flex justify-between px-4 py-3">
+    <dt class="text-slate-600">Admin</dt>
+    <dd class="text-slate-900"><%= @user.admin? ? "yes" : "no" %></dd>
+  </div>
+
+  <div class="flex justify-between px-4 py-3">
+    <dt class="text-slate-600">Created</dt>
+    <dd class="text-slate-900"><%= @user.created_at.to_fs(:short) %></dd>
+  </div>
+</dl>

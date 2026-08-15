@@ -1,0 +1,20 @@
+<% content_for :title, "Admin" %>
+
+<h1 class="text-2xl font-bold text-slate-900">Overview</h1>
+
+<dl class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  <div class="rounded border border-slate-200 bg-white p-4">
+    <dt class="text-sm text-slate-600">Users</dt>
+    <dd data-testid="user-count" class="mt-1 text-2xl font-semibold text-slate-900"><%= @user_count %></dd>
+  </div>
+
+  <div class="rounded border border-slate-200 bg-white p-4">
+    <dt class="text-sm text-slate-600">Admins</dt>
+    <dd data-testid="admin-count" class="mt-1 text-2xl font-semibold text-slate-900"><%= @admin_count %></dd>
+  </div>
+
+  <div class="rounded border border-slate-200 bg-white p-4">
+    <dt class="text-sm text-slate-600">Unconfirmed</dt>
+    <dd data-testid="unconfirmed-count" class="mt-1 text-2xl font-semibold text-slate-900"><%= @unconfirmed_count %></dd>
+  </div>
+</dl>

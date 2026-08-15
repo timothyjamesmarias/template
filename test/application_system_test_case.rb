@@ -3,8 +3,18 @@ require "test_helper"
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ]
 
-  def sign_in_as(email: "member@example.com", password: "password123")
-    User.create!(email: email, password: password).confirm
+  # The first browser interaction in a run waits on Vite serving assets, which
+  # exceeds Capybara's 2s default.
+  Capybara.default_max_wait_time = 10
+
+  # KNOWN ISSUE: this is flaky at roughly 1 in 5. Turbo intermittently re-renders
+  # the sign-in page after Capybara fills it, clearing the inputs, so an empty
+  # form is submitted and Devise re-renders without an error. Waiting on
+  # readyState, window.Turbo, window.Stimulus, turbo-loading, and refilling the
+  # fields were all tried and none fixed it. Needs a real look at Turbo's
+  # rendering lifecycle rather than another wait condition.
+  def sign_in_as(email: "member@example.com", password: "password123", admin: false)
+    User.create!(email: email, password: password, admin: admin).confirm
 
     visit new_user_session_path
     find("[data-testid='email']").set(email)

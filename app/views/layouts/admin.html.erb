@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Admin" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%= vite_client_tag %>
+    <%= vite_stylesheet_tag "application" %>
+    <%= vite_javascript_tag "application" %>
+    <%= yield :react_app %>
+  </head>
+
+  <body class="bg-slate-50">
+    <nav class="border-b border-slate-200 bg-white">
+      <div class="container mx-auto flex items-center justify-between px-5 py-3 text-sm">
+        <div class="flex items-center gap-4">
+          <%= link_to "Admin", admin_root_path, class: "font-semibold text-slate-900" %>
+          <%= link_to "Users", admin_users_path, class: "text-slate-600 underline" %>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <%= link_to "Back to app", root_path, class: "text-slate-600 underline" %>
+          <span data-testid="current-user" class="text-slate-600"><%= current_user.email %></span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mx-auto mt-8 px-5">
+      <%= render "layouts/flash" %>
+      <%= yield %>
+    </main>
+  </body>
+</html>
