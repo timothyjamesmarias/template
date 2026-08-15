@@ -272,11 +272,20 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   # ==> OmniAuth
-  # Credentials live in Rails credentials (bin/rails credentials:edit) or the
-  # matching env vars. Google sign-in is skipped when they are absent, so a
-  # fresh checkout boots without configuration.
-  google_client_id = ENV["GOOGLE_CLIENT_ID"] || Rails.application.credentials.dig(:google, :client_id)
-  google_client_secret = ENV["GOOGLE_CLIENT_SECRET"] || Rails.application.credentials.dig(:google, :client_secret)
+  # Google sign-in is skipped when credentials are absent, so a fresh checkout
+  # boots without configuration.
+  #
+  # Reading credentials is wrapped because it decrypts credentials.yml.enc, which
+  # raises when RAILS_MASTER_KEY is absent or does not match that file. A missing
+  # OAuth provider should hide a button, never take the app down at boot.
+  google_credentials = begin
+    Rails.application.credentials.google || {}
+  rescue StandardError
+    {}
+  end
+
+  google_client_id = ENV["GOOGLE_CLIENT_ID"].presence || google_credentials[:client_id]
+  google_client_secret = ENV["GOOGLE_CLIENT_SECRET"].presence || google_credentials[:client_secret]
 
   if google_client_id.present? && google_client_secret.present?
     config.omniauth :google_oauth2, google_client_id, google_client_secret, scope: "email,profile"
