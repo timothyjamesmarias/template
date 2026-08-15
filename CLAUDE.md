@@ -141,9 +141,18 @@ security maintainer.
   is a per-project upgrade when job volume justifies it, not a default.
 - **Postgres runs in Docker Compose; the app runs natively.** Fast dev loop on
   macOS.
-- **Deployment is undecided.** No Kamal, no `render.yaml`. The app reads
-  `POSTGRES_*` env vars and ships as a Docker image, which keeps every option
-  open. Do not add deploy config without asking.
+- **Render is the default deploy target** via `render.yaml`; Kamal was removed.
+  The app still ships as a plain Docker image, so nothing is locked in.
+  - One web service. Solid Queue runs inside Puma (`SOLID_QUEUE_IN_PUMA`) so a
+    deploy costs one paid service rather than two. The blueprint has a commented
+    worker for when jobs outgrow that.
+  - Render exposes only `connectionString` for Postgres — `host`/`port` are Key
+    Value only — so production uses `DATABASE_URL`, which Rails merges over
+    `database.yml`. `POSTGRES_*` stays the dev/test path.
+  - `assume_ssl` + `force_ssl` are on. `/up` is excluded from both the SSL
+    redirect and host authorization, or Render's health check fails the deploy.
+  - Hosts and mailer URLs read `APP_HOST`, falling back to Render's
+    `RENDER_EXTERNAL_HOSTNAME`.
 
 ## Testing
 

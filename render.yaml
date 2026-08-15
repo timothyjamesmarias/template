@@ -1,0 +1,70 @@
+databases:
+  - name: template-db
+    plan: basic-256mb
+    databaseName: template_production
+    user: template
+    postgresMajorVersion: "17"
+
+services:
+  - type: web
+    name: template
+    runtime: docker
+    plan: starter
+    healthCheckPath: /up
+    autoDeployTrigger: commit
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_MAX_THREADS
+        value: "3"
+      - key: WEB_CONCURRENCY
+        value: "2"
+
+      # Solid Queue runs inside Puma so a deploy needs one paid service instead
+      # of two. Move to the worker below when job volume outgrows the web dyno.
+      - key: SOLID_QUEUE_IN_PUMA
+        value: "true"
+      - key: JOB_CONCURRENCY
+        value: "1"
+
+      # Rails merges DATABASE_URL over config/database.yml, so this supersedes
+      # the POSTGRES_* vars used in development. Render only exposes host/port
+      # for Key Value instances, not Postgres.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: template-db
+          property: connectionString
+
+      # Set once a custom domain is attached. Until then Rails falls back to
+      # RENDER_EXTERNAL_HOSTNAME, which Render injects automatically.
+      - key: APP_HOST
+        sync: false
+
+      - key: MAILER_SENDER
+        sync: false
+
+      # Google sign-in stays hidden until both are set.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+
+  # Dedicated job worker. Enable this and set SOLID_QUEUE_IN_PUMA to false on
+  # the web service when jobs need their own resources.
+  #
+  # - type: worker
+  #   name: template-jobs
+  #   runtime: docker
+  #   plan: starter
+  #   dockerCommand: ./bin/jobs
+  #   envVars:
+  #     - key: RAILS_ENV
+  #       value: production
+  #     - key: RAILS_MASTER_KEY
+  #       sync: false
+  #     - key: DATABASE_URL
+  #       fromDatabase:
+  #         name: template-db
+  #         property: connectionString
