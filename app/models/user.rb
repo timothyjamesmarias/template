@@ -31,4 +31,26 @@ class User < ApplicationRecord
   def can_administer?
     admin?
   end
+
+  ACTIVE_SUBSCRIPTION_STATUSES = %w[active trialing].freeze
+
+  def subscribed?
+    ACTIVE_SUBSCRIPTION_STATUSES.include?(subscription_status)
+  end
+
+  def stripe_customer
+    @stripe_customer ||= if stripe_customer_id.present?
+      Stripe::Customer.retrieve(stripe_customer_id)
+    else
+      create_stripe_customer
+    end
+  end
+
+  private
+
+  def create_stripe_customer
+    customer = Stripe::Customer.create(email: email)
+    update_column(:stripe_customer_id, customer.id)
+    customer
+  end
 end

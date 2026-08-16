@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Settings" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%= vite_client_tag %>
+    <%= vite_stylesheet_tag "application" %>
+    <%= vite_javascript_tag "application" %>
+    <%= yield :react_app %>
+  </head>
+
+  <body>
+    <%= render "layouts/navigation" %>
+
+    <div class="container mx-auto mt-8 px-5">
+      <h1 class="text-2xl font-bold text-slate-900">Settings</h1>
+
+      <div class="mt-6 flex flex-col gap-8 sm:flex-row">
+        <nav class="sm:w-48 sm:shrink-0">
+          <ul class="space-y-1 text-sm">
+            <% [ [ "Profile", settings_profile_path ],
+                 [ "Billing", settings_billing_path ],
+                 [ "Security", settings_security_path ] ].each do |label, path| %>
+              <li>
+                <%= link_to label, path,
+                      class: "block rounded px-3 py-2 #{current_page?(path) ? "bg-slate-100 font-medium text-slate-900" : "text-slate-600"}" %>
+              </li>
+            <% end %>
+          </ul>
+        </nav>
+
+        <main class="min-w-0 flex-1">
+          <%= render "layouts/flash" %>
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

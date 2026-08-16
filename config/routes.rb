@@ -15,6 +15,17 @@ Rails.application.routes.draw do
     resources :users, only: [ :index, :show ]
   end
 
+  namespace :settings do
+    root "profiles#show"
+    resource :profile, only: :show
+    resource :billing, only: :show do
+      post :portal
+    end
+    resource :security, only: :show
+  end
+
+  post "webhooks/stripe" => "stripe_webhooks#create"
+
   get "dashboard" => "dashboard#show"
 
   # Defines the root path route ("/")

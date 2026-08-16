@@ -7,6 +7,7 @@
         <% if current_user.can_administer? %>
           <%= link_to "Admin", admin_root_path, data: { testid: "admin-link" }, class: "text-slate-600 underline" %>
         <% end %>
+        <%= link_to "Settings", settings_root_path, class: "text-slate-600 underline" %>
         <span data-testid="current-user" class="text-slate-600"><%= current_user.email %></span>
         <%= button_to "Sign out", destroy_user_session_path, method: :delete,
               data: { testid: "sign-out" }, class: "text-slate-600 underline" %>

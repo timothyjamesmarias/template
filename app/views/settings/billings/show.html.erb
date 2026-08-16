@@ -1,0 +1,28 @@
+<% content_for :title, "Billing" %>
+
+<h2 class="text-lg font-medium text-slate-900">Billing</h2>
+
+<% if @user.subscribed? %>
+  <dl class="mt-4 max-w-sm divide-y divide-slate-100 rounded border border-slate-200 text-sm">
+    <div class="flex justify-between px-4 py-3">
+      <dt class="text-slate-600">Plan</dt>
+      <dd class="text-slate-900"><%= @user.plan.presence || "—" %></dd>
+    </div>
+
+    <div class="flex justify-between px-4 py-3">
+      <dt class="text-slate-600">Status</dt>
+      <dd class="text-slate-900"><%= @user.subscription_status %></dd>
+    </div>
+  </dl>
+<% else %>
+  <p class="mt-4 max-w-sm rounded border border-slate-200 px-4 py-3 text-sm text-slate-600">
+    You do not have an active subscription.
+  </p>
+<% end %>
+
+<%= button_to "Manage billing", portal_settings_billing_path,
+      class: "mt-4 rounded border border-slate-300 px-3 py-2 text-sm text-slate-700" %>
+
+<p class="mt-2 text-xs text-slate-500">
+  Payment methods, invoices, and cancellation are handled by Stripe.
+</p>

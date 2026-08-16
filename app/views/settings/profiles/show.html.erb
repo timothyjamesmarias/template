@@ -1,0 +1,26 @@
+<% content_for :title, "Profile" %>
+
+<h2 class="text-lg font-medium text-slate-900">Profile</h2>
+
+<%= form_for(@user, as: :user, url: user_registration_path, html: { method: :put, class: "mt-4 max-w-sm space-y-4" }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: @user %>
+
+  <%= render "devise/shared/field", form: f, attribute: :email, as: :email_field,
+        options: { autocomplete: "email" } %>
+
+  <%= render "devise/shared/field", form: f, attribute: :password, as: :password_field,
+        hint: "Leave blank to keep your current password",
+        options: { autocomplete: "new-password" } %>
+
+  <%= render "devise/shared/field", form: f, attribute: :password_confirmation, as: :password_field,
+        options: { autocomplete: "new-password" } %>
+
+  <%# Accounts created through OAuth have no password to confirm against. %>
+  <% if @user.encrypted_password.present? %>
+    <%= render "devise/shared/field", form: f, attribute: :current_password, as: :password_field,
+          hint: "Required to save changes",
+          options: { autocomplete: "current-password" } %>
+  <% end %>
+
+  <%= f.submit "Save", class: "rounded bg-indigo-600 px-3 py-2 text-sm text-white" %>
+<% end %>

@@ -54,6 +54,13 @@ services:
       - key: MAILER_SENDER
         sync: false
 
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PRICE_ID
+        sync: false
+
       # Google sign-in stays hidden until both are set.
       - key: GOOGLE_CLIENT_ID
         sync: false

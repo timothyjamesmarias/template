@@ -17,6 +17,9 @@ gem "turbo-rails"
 gem "devise"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
+
+# Payments [https://github.com/stripe/stripe-ruby]
+gem "stripe"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
